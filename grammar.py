@@ -20,6 +20,6 @@ class Grammar:
 
     def cfg_check(self):
         for left_hand_side in self.productions.keys():
-            if len(left_hand_side) > 1:
+            if left_hand_side not in self.non_terminals:
                 return False
         return True
