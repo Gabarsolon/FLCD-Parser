@@ -1,5 +1,5 @@
 program,cmpdstmt,constant,integer,character,string,declaration,gtype,identifier,declaration_and_assignment,integer_constant_or_identifier,arrayaccess,simpletype,arraydecl,stmtlist,stmt,simplstmt,assignstmt,expression,operator,term,iostmt,readstmt,showstmt,identifier_or_arrayaccess,variable_or_constant,channel,structstmt,ifstmt,whilestmt,forstmt,condition,relation,increment_or_decrement_variable,increment_or_decrement,comment
-define,=,read,show,stdin,stdout,{,},(,),',', ,';',+,-,*,/,if,fi,for,starts from,transforms,into,stops,at,and,or,not,#
+define,=,read,show,stdin,stdout,{,},(,),\,, ,;,+,-,*,/,if,fi,for,starts from,transforms,into,stops,at,and,or,not,#
 program
 program->cmpdstmt|program;cmpdstmt
 constant->integer|character|string
@@ -11,7 +11,7 @@ integer_constant_or_identifier->integer|identifier
 arrayaccess->identifier;[;integer_constant_or_identifier;]
 type->simpletype|arraydecl
 cmpdstmt->{;stmtlist;}
-stmtlist->stmt;';'|stmt;';';stmtlist
+stmtlist->stmt;\;|stmt;\;;stmtlist
 stmt->simplstmt|structstmt|declaration
 simplstmt->assignstmt|iostmt
 assignstmt->identifier;=;expression|arrayaccess;=;expression

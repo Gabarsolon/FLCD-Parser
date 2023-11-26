@@ -12,18 +12,19 @@ class Grammar:
         with open(file_path) as grammar_file:
             self.non_terminals = grammar_file.readline().strip().split(',')
 
-            pattern = re.compile(r",(?=(?:[^']*'[^']*')*[^']*$)")
-            self.terminals = pattern.split(grammar_file.readline().strip())
+            self.terminals = [terminal.replace(r'\,', ',')
+                              for terminal in re.split(r"(?<!\\),",
+                                                       grammar_file.readline().strip())]
 
             self.start_symbol = grammar_file.readline().strip()
             for production in grammar_file.readlines():
                 left_hand_side, right_hand_side = production.strip().split('->', maxsplit=1)
 
                 self.productions[left_hand_side] = list()
-                pattern = re.compile(r";(?=(?:[^']*'[^']*')*[^']*$)")
                 for current_non_terminal_production in right_hand_side.split("|"):
-                    self.productions[left_hand_side].append(pattern.split(current_non_terminal_production))
-
+                    self.productions[left_hand_side].append([current_production.replace(r'\;', ';')
+                                                             for current_production in re.split(r"(?<!\\);",
+                                                                                        current_non_terminal_production)])
 
     def productions_for_a_given_non_terminal(self, non_terminal):
         # TODO
