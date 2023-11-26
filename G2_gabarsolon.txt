@@ -20,8 +20,8 @@ operator->+|-|*|/
 term->term*factor|term/factor|factor
 factor->identifier|arrayaccess|constant
 iostmt->readstmt|showstmt
-readstmt->read;(;identifier_or_arrayaccess;',';channel;)
-showstmt->show;(;variable_or_constant;',';channel;)
+readstmt->read;(;identifier_or_arrayaccess;,;channel;)
+showstmt->show;(;variable_or_constant;,;channel;)
 identifier_or_arrayaccess->identifier|arrayaccess
 variable_or_constant->identifier_or_arrayaccess|constant
 channel->stdin|stdout
