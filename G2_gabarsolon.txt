@@ -15,7 +15,7 @@ stmtlist->stmt;\;|stmt;\;;stmtlist
 stmt->simplstmt|structstmt|declaration
 simplstmt->assignstmt|iostmt
 assignstmt->identifier;=;expression|arrayaccess;=;expression
-expression->term;+;expression;term|term
+expression->term;+;expression;|term;-;expression|term
 operator->+|-|*|/
 term->term;*;factor|term;/;factor|factor
 factor->identifier|arrayaccess|constant
@@ -26,7 +26,7 @@ identifier_or_arrayaccess->identifier|arrayaccess
 variable_or_constant->identifier_or_arrayaccess|constant
 channel->stdin|stdout
 structstmt->cmpdstmt|ifstmt|whilestmt|forstmt
-ifstmt->if;condition;{;stmt;}|if;condition;fi;{;stmt;}|if;condition;fi;ifstmt
+ifstmt->if; ;condition; ;{;stmt;}|if; ;condition; ;fi;{;stmt;}|if; ;condition; ;fi; ;ifstmt
 whilestmt->while;condition;{;stmt;}
 forstmt->for; ;identifier; ;starts; ;from; variable_or_constant; ;transforms; ;into; ;assignstmt; ;stops; ;at; ;condition; {;stmt;}
 condition->expression;relation;expression
