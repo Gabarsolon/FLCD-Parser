@@ -1,5 +1,5 @@
-program,cmpdstmt,constant,integer,character,string,declaration,gtype,identifier,declaration_and_assignment,integer_constant_or_identifier,arrayaccess,simpletype,arraydecl,stmtlist,stmt,simplstmt,assignstmt,expression,operator,term,iostmt,readstmt,showstmt,identifier_or_arrayaccess,variable_or_constant,channel,structstmt,ifstmt,whilestmt,forstmt,condition,relation,increment_or_decrement_variable,increment_or_decrement,comment
-define,=,read,show,stdin,stdout,{,},(,),\,, ,;,+,-,*,/,if,fi,for,starts from,transforms,into,stops,at,and,or,not,#
+program,cmpdstmt,constant,integer,character,string,declaration,type,identifier,declaration_and_assignment,integer_constant_or_identifier,arrayaccess,simpletype,arraydecl,stmtlist,stmt,simplstmt,assignstmt,expression,operator,term,iostmt,readstmt,showstmt,identifier_or_arrayaccess,variable_or_constant,channel,structstmt,ifstmt,whilestmt,forstmt,condition,relation,increment_or_decrement_variable,increment_or_decrement,comment
+define,=,read,show,stdin,stdout,{,},(,),[,],\,, ,;,+,-,*,/,if,fi,for,starts from,transforms,into,stops,at,and,or,not,#
 program
 program->cmpdstmt|program;cmpdstmt
 constant->integer|character|string
@@ -15,9 +15,9 @@ stmtlist->stmt;\;|stmt;\;;stmtlist
 stmt->simplstmt|structstmt|declaration
 simplstmt->assignstmt|iostmt
 assignstmt->identifier;=;expression|arrayaccess;=;expression
-expression->term+expression;term|term
+expression->term;+;expression;term|term
 operator->+|-|*|/
-term->term*factor|term/factor|factor
+term->term;*;factor|term;/;factor|factor
 factor->identifier|arrayaccess|constant
 iostmt->readstmt|showstmt
 readstmt->read;(;identifier_or_arrayaccess;,;channel;)
@@ -28,7 +28,7 @@ channel->stdin|stdout
 structstmt->cmpdstmt|ifstmt|whilestmt|forstmt
 ifstmt->if;condition;{;stmt;}|if;condition;fi;{;stmt;}|if;condition;fi;ifstmt
 whilestmt->while;condition;{;stmt;}
-forstmt->for;identifier;starts from;variable_or_constant;transforms into;assignstmt;stops at;condition;{;stmt;}
+forstmt->for; ;identifier; ;starts; ;from; variable_or_constant; ;transforms; ;into; ;assignstmt; ;stops; ;at; ;condition; {;stmt;}
 condition->expression;relation;expression
 relation-><|<=|==|>|>=|===|and|or|not
 increment_or_decrement_variable->identifier_or_arrayaccess;increment_or_decrement;integer_constant_or_identifier
