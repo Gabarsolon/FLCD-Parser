@@ -32,5 +32,6 @@ class Grammar:
     def cfg_check(self):
         for left_hand_side in self.productions.keys():
             if left_hand_side not in self.non_terminals:
+                print(left_hand_side)
                 return False
         return True

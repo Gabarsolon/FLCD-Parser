@@ -1,5 +1,5 @@
-program,cmpdstmt,constant,integer,character,string,declaration,type,identifier,declaration_and_assignment,integer_constant_or_identifier,arrayaccess,simpletype,arraydecl,stmtlist,stmt,simplstmt,assignstmt,expression,operator,term,iostmt,readstmt,showstmt,identifier_or_arrayaccess,variable_or_constant,channel,structstmt,ifstmt,whilestmt,forstmt,condition,relation,increment_or_decrement_variable,increment_or_decrement,comment
-define,=,read,show,stdin,stdout,{,},(,),[,],\,, ,;,+,-,*,/,if,fi,for,starts from,transforms,into,stops,at,and,or,not,#
+program,cmpdstmt,constant,integer,character,string,declaration,type,identifier,declaration_and_assignment,integer_constant_or_identifier,arrayaccess,simpletype,arraydecl,stmtlist,stmt,simplstmt,assignstmt,expression,operator,term,factor,iostmt,readstmt,showstmt,identifier_or_arrayaccess,variable_or_constant,channel,structstmt,ifstmt,whilestmt,forstmt,condition,relation,increment_or_decrement_variable,increment_or_decrement,comment
+define,=,read,show,stdin,stdout,{,},(,),[,],\,, ,;,_,+,-,*,/,if,fi,for,starts from,transforms,into,stops,at,and,or,not,#,0-9,A-Z,a-z,',_,!,@,$,%,&
 program
 program->cmpdstmt|program;cmpdstmt
 constant->integer|character|string
@@ -34,3 +34,14 @@ relation-><|<=|==|>|>=|===|and|or|not
 increment_or_decrement_variable->identifier_or_arrayaccess;increment_or_decrement;integer_constant_or_identifier
 increment_or_decrement->+=|-=
 comment->#;string;#
+identifier->letter|_|letter;digit;identifier;|_;digit;identifier|letter;identifier|_;identifier|identifie;digit
+digit->0-9
+letter->A-Z|a-z
+nonzerodigit->1-9
+naturalnumber->nonzerodigit|nonzerodigit;digit_sequence
+digit_sequence->digit|digit;digit_sequence
+integer->naturalnumber|+;naturalnumber|-naturalnumber|0
+character->';letter;'|';digit;'|_| |!|@|$|%|&
+string->";character_aux;"|";character_aux;character_seq;"
+character_seq->character_aux|character_aux;character_seq
+character_aux>->letter|digit|_| |!|@|$|%|&
