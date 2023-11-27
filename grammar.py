@@ -24,11 +24,10 @@ class Grammar:
                 for current_non_terminal_production in right_hand_side.split("|"):
                     self.productions[left_hand_side].append([current_production.replace(r'\;', ';')
                                                              for current_production in re.split(r"(?<!\\);",
-                                                                                        current_non_terminal_production)])
+                                                                                                current_non_terminal_production)])
 
     def productions_for_a_given_non_terminal(self, non_terminal):
-        # TODO
-        return None
+        return self.productions[non_terminal] if non_terminal in self.non_terminals else "Invalid non-terminal"
 
     def cfg_check(self):
         for left_hand_side in self.productions.keys():
