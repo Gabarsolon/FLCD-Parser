@@ -1,5 +1,8 @@
 import re
 
+from analysis_element import AnalysisElement
+from production import Production
+
 
 class Grammar:
     def __init__(self):
@@ -25,10 +28,12 @@ class Grammar:
                 else:
                     left_hand_side = left_hand_side[0]
 
-                self.productions[left_hand_side] = list()
+                if left_hand_side not in self.productions:
+                    self.productions[left_hand_side] = list()
                 for current_non_terminal_production in right_hand_side.split("|"):
-                    self.productions[left_hand_side].append([current_production.replace(r'\;', ';')
-                                                             for current_production in re.split(r"(?<!\\);",current_non_terminal_production)])
+                    self.productions[left_hand_side].append(
+                        Production(left_hand_side, [current_production.replace(r'\;', ';') for current_production in
+                        re.split(r"(?<!\\);", current_non_terminal_production)]))
 
     def productions_for_a_given_non_terminal(self, non_terminal):
         return self.productions[non_terminal] if non_terminal in self.non_terminals else "Invalid non-terminal"
@@ -39,3 +44,25 @@ class Grammar:
                 print(left_hand_side)
                 return False
         return True
+
+    def closure(self, analysis_element):
+        '''
+
+        :param production_with_prefix:
+        :return:
+        '''
+        closure_set = list()
+        closure_set.append(analysis_element)
+        C_has_been_modified = True
+        while C_has_been_modified:
+            C_has_been_modified = False
+            for analysis_element in closure_set:
+                B = analysis_element.production.right_hand_side[analysis_element.prefix_position]
+                if B not in self.non_terminals:
+                    continue
+                for b_production in self.productions_for_a_given_non_terminal(B):
+                    new_analysis_element = AnalysisElement(b_production, 0)
+                    if new_analysis_element not in closure_set:
+                        C_has_been_modified = True
+                        closure_set.append(new_analysis_element)
+        return closure_set

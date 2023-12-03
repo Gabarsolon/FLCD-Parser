@@ -1,6 +1,7 @@
-S,C
-a,b
-S
-S->a;b|a;C;S;b
-C->S|b;S;b
-C;S->b
+S',S,A
+a,b,c
+S'
+S'->S
+S->a;A
+A->b;A
+A->C
