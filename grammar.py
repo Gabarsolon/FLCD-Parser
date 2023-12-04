@@ -33,7 +33,7 @@ class Grammar:
                 for current_non_terminal_production in right_hand_side.split("|"):
                     self.productions[left_hand_side].append(
                         Production(left_hand_side, [current_production.replace(r'\;', ';') for current_production in
-                        re.split(r"(?<!\\);", current_non_terminal_production)]))
+                                                    re.split(r"(?<!\\);", current_non_terminal_production)]))
 
     def productions_for_a_given_non_terminal(self, non_terminal):
         return self.productions[non_terminal] if non_terminal in self.non_terminals else "Invalid non-terminal"
@@ -46,11 +46,11 @@ class Grammar:
         return True
 
     def closure(self, analysis_element):
-        '''
+        """
 
-        :param production_with_prefix:
+        :param analysis_element:
         :return:
-        '''
+        """
         closure_set = list()
         closure_set.append(analysis_element)
         C_has_been_modified = True
@@ -66,3 +66,30 @@ class Grammar:
                         C_has_been_modified = True
                         closure_set.append(new_analysis_element)
         return closure_set
+
+    def goto(self, analysisElements, symbol):
+        """
+
+        :param analysisElements:
+        :param symbol:
+        :return:
+        """
+        result = list()
+        for elem in analysisElements:
+            if symbol in elem.production.right_hand_side:
+                if elem.production.right_hand_side.index(symbol) == elem.prefix_position:
+                    elem.prefix_position += 1
+                    result.append(self.closure(elem))
+        return result
+
+    def canonicalCollection(self):
+        result = [self.closure(AnalysisElement(Production(self.start_symbol, self.productions_for_a_given_non_terminal(self.start_symbol)[0]), 0))]
+        index = 0
+        while index < len(result):
+            for elem in result[index]:
+                for symbol in elem.production.right_hand_side[elem.prefix_position:]:
+                    newState = self.goto(elem, symbol)
+                    if len(newState) > 0:
+                        result.append(newState)
+            index += 1
+        return result
