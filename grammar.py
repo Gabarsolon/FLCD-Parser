@@ -45,14 +45,13 @@ class Grammar:
                 return False
         return True
 
-    def closure(self, analysis_element):
+    def closure(self, analysisElements):
         """
 
-        :param analysis_element:
+        :param analysisElements: list of AnalysisElement
         :return:
         """
-        closure_set = list()
-        closure_set.append(analysis_element)
+        closure_set = analysisElements
         C_has_been_modified = True
         while C_has_been_modified:
             C_has_been_modified = False
@@ -79,11 +78,11 @@ class Grammar:
             if symbol in elem.production.right_hand_side:
                 if elem.production.right_hand_side.index(symbol) == elem.prefix_position:
                     elem.prefix_position += 1
-                    result.append(self.closure(elem))
-        return result
+                    result.append(elem)
+        return self.closure(result)
 
     def canonicalCollection(self):
-        result = [self.closure(AnalysisElement(Production(self.start_symbol, self.productions_for_a_given_non_terminal(self.start_symbol)[0]), 0))]
+        result = [self.closure([AnalysisElement(Production(self.start_symbol, self.productions_for_a_given_non_terminal(self.start_symbol)[0]), 0)])]
         index = 0
         while index < len(result):
             for elem in result[index]:

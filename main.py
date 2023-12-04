@@ -11,7 +11,6 @@ def print_menu():
 def main():
     grammar = Grammar()
     grammar.read_grammar_from_file("G1.txt")
-    print(grammar.closure(AnalysisElement(Production("S", ["a", "A"]), 1)))
     while True:
         print_menu()
         option = input("Enter your option: ")
