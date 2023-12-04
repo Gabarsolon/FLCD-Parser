@@ -34,5 +34,39 @@ class TestLR0(unittest.TestCase):
         ])
 
     def test_col_can(self):
-        print(self.grammar.canonicalCollection())
+        assert(self.grammar.canonicalCollection() == [
+            #s0
+            [
+                AnalysisElement(Production("S'", ["S"]),      0),
+                AnalysisElement(Production("S",  ["a", "A"]), 0)
+            ],
+            #s1
+            [
+               AnalysisElement(Production("S'", ["S"]), 1)
+            ],
+            #s2
+            [
+                AnalysisElement(Production("S", ["a", "A"]), 1),
+                AnalysisElement(Production("A", ["b", "A"]), 0),
+                AnalysisElement(Production("A", ["c"]),     0)
+            ],
+            #s3
+            [
+                AnalysisElement(Production("S", ["a", "A"]), 2)
+            ],
+            #s4
+            [
+                AnalysisElement(Production("A", ["b", "A"]), 1),
+                AnalysisElement(Production("A", ["b", "A"]), 0),
+                AnalysisElement(Production("A", ["c"]),      0)
+            ],
+            #s5
+            [
+               AnalysisElement(Production("A", ["c"]), 1),
+            ],
+            #s6
+            [
+                AnalysisElement(Production("A", ["b", "A"]), 2)
+            ]
+        ])
 

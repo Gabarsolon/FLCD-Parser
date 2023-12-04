@@ -56,6 +56,8 @@ class Grammar:
         while C_has_been_modified:
             C_has_been_modified = False
             for analysis_element in closure_set:
+                if analysis_element.prefix_position >= len(analysis_element.production.right_hand_side):
+                    continue
                 B = analysis_element.production.right_hand_side[analysis_element.prefix_position]
                 if B not in self.non_terminals:
                     continue
@@ -77,18 +79,19 @@ class Grammar:
         for elem in analysisElements:
             if symbol in elem.production.right_hand_side:
                 if elem.production.right_hand_side.index(symbol) == elem.prefix_position:
-                    elem.prefix_position += 1
-                    result.append(elem)
+                    analysis_element_with_shifted_dot = AnalysisElement(elem.production, elem.prefix_position +1)
+                    result.append(analysis_element_with_shifted_dot)
         return self.closure(result)
 
     def canonicalCollection(self):
-        result = [self.closure([AnalysisElement(Production(self.start_symbol, self.productions_for_a_given_non_terminal(self.start_symbol)[0]), 0)])]
+        result = [self.closure([AnalysisElement(self.productions_for_a_given_non_terminal(self.start_symbol)[0], 0)])]
+        print(result)
         index = 0
         while index < len(result):
             for elem in result[index]:
                 for symbol in elem.production.right_hand_side[elem.prefix_position:]:
-                    newState = self.goto(elem, symbol)
-                    if len(newState) > 0:
+                    newState = self.goto(result[index], symbol)
+                    if len(newState) > 0 and newState not in result:
                         result.append(newState)
             index += 1
         return result
