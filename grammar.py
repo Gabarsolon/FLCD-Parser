@@ -79,7 +79,7 @@ class Grammar:
         for elem in analysisElements:
             if symbol in elem.production.right_hand_side:
                 if elem.production.right_hand_side.index(symbol) == elem.prefix_position:
-                    analysis_element_with_shifted_dot = AnalysisElement(elem.production, elem.prefix_position +1)
+                    analysis_element_with_shifted_dot = AnalysisElement(elem.production, elem.prefix_position + 1)
                     result.append(analysis_element_with_shifted_dot)
         return self.closure(result)
 
@@ -98,7 +98,8 @@ class Grammar:
 
     def get_production_number(self, production):
         #                                                                             ignore S'
-        return [production for productions_for_terminal in list(self.productions.values())[1:] for production in productions_for_terminal].index(production)
+        return [production for productions_for_terminal in list(self.productions.values())[1:] for production in
+                productions_for_terminal].index(production)
 
     def get_production_given_his_number(self, production_number):
         return [production for productions_for_terminal in list(self.productions.values())[1:] for production in
@@ -133,13 +134,14 @@ class Grammar:
                 if analysis_element.prefix_position < len(analysis_element.production.right_hand_side):
                     if "shift" not in table_entry["ACTION"]:
                         table_entry["ACTION"].append("shift")
-                    #check which state threats this shift
+                    # check which state threats this shift
                     symbol_to_add = analysis_element.production.right_hand_side[analysis_element.prefix_position]
                     for state_to_check_index in range(state_index, len(states)):
                         state_to_check = states[state_to_check_index]
                         first_analysis_element = state_to_check[0]
                         if first_analysis_element.prefix_position > 0:
-                            if first_analysis_element.production.right_hand_side[first_analysis_element.prefix_position - 1] == symbol_to_add:
+                            if first_analysis_element.production.right_hand_side[
+                                first_analysis_element.prefix_position - 1] == symbol_to_add:
                                 table_entry["GOTO"][symbol_to_add] = state_to_check_index
                                 break
                 elif analysis_element.prefix_position == len(analysis_element.production.right_hand_side):
@@ -162,11 +164,13 @@ class Grammar:
         while len(working_stack) != 0:
             state = working_stack[-1]
             table_entry = parsing_table[state]
-            action = table_entry["ACTION"]
-            if len(action) > 1:
-                print("The grammar is not LR(0)")
+            actions = table_entry["ACTION"]
+            if len(actions) > 1:
+                print(
+                    "The grammar is not LR(0).\nConflict appears on row {0}, for symbol {1}\nThe states in conflict are: {2}\nGOTO Column: ".format(
+                        state, input_stack[0], str(actions), str(table_entry["GOTO"])))
                 return
-            action = action[0]
+            action = actions[0]
             if action == "shift":
                 current_sequence_item = input_stack[0]
                 if current_sequence_item in table_entry["GOTO"]:
@@ -199,4 +203,3 @@ class Grammar:
 
         print("Sequence is not valid")
         return
-
