@@ -85,7 +85,7 @@ class Grammar:
 
     def canonicalCollection(self):
         result = [self.closure([AnalysisElement(self.productions_for_a_given_non_terminal(self.start_symbol)[0], 0)])]
-        print(result)
+        # print(result)
         index = 0
         while index < len(result):
             for elem in result[index]:
@@ -95,3 +95,66 @@ class Grammar:
                         result.append(newState)
             index += 1
         return result
+
+    def get_production_number(self, production):
+        #                                                                             ignore S'
+        return [production for productions_for_terminal in list(self.productions.values())[1:] for production in productions_for_terminal].index(production)
+
+    def parsing_table(self):
+        """
+        The table will be represented as a list (as shown bellow)
+        State 0 is in the position 0 of the list
+        [
+            {
+                ACTION: ["shift" | "accept" | "r1" | "error,]
+                GOTO: {
+                    a: 2,
+                    A: 3
+                    ...
+                }
+            }
+        ]
+        :return:
+        """
+        states = self.canonicalCollection()
+        table = []
+
+        for state_index in range(0, len(states)):
+            state = states[state_index]
+            table_entry = {
+                "ACTION": [],
+                "GOTO": {}
+            }
+            for analysis_element in state:
+                if analysis_element.prefix_position < len(analysis_element.production.right_hand_side):
+                    if "shift" not in table_entry["ACTION"]:
+                        table_entry["ACTION"].append("shift")
+                    #check which state threats this shift
+                    symbol_to_add = analysis_element.production.right_hand_side[analysis_element.prefix_position]
+                    for state_to_check_index in range(state_index + 1, len(states)):
+                        state_to_check = states[state_to_check_index]
+
+                        first_analysis_element = state_to_check[0]
+                        if first_analysis_element.prefix_position > 0:
+                            if state_to_check_index == 3:
+                                print(first_analysis_element)
+                            if first_analysis_element.production.right_hand_side[first_analysis_element.prefix_position - 1] == symbol_to_add:
+                                table_entry["GOTO"][symbol_to_add] = state_to_check_index
+                                break
+                elif analysis_element.prefix_position == len(analysis_element.production.right_hand_side):
+                    print(analysis_element)
+                    analysis_element_to_check = AnalysisElement(self.productions[self.start_symbol], 1)
+                    if analysis_element == AnalysisElement(self.productions[self.start_symbol][0], 1):
+                        table_entry["ACTION"].append("accept")
+                    else:
+                        table_entry["ACTION"].append("r" + str(self.get_production_number(analysis_element.production)))
+                else:
+                    table_entry["ACTION"].append("error")
+            table.append(table_entry)
+        return table
+
+    def parse_sequence(self, sequence):
+        working_stack = [0]
+        input_stack = [sequence.split("")]
+        output_band = []
+

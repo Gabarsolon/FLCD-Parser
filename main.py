@@ -11,6 +11,7 @@ def print_menu():
 def main():
     grammar = Grammar()
     grammar.read_grammar_from_file("G1.txt")
+    print(grammar.parsing_table())
     while True:
         print_menu()
         option = input("Enter your option: ")

@@ -34,6 +34,7 @@ class TestLR0(unittest.TestCase):
         ])
 
     def test_col_can(self):
+        print(self.grammar.canonicalCollection())
         assert(self.grammar.canonicalCollection() == [
             #s0
             [
