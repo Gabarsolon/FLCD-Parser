@@ -7,4 +7,4 @@ class AnalysisElement:
         return self.production == other.production and self.prefix_position == other.prefix_position
 
     def __repr__(self) -> str:
-        return str(self.production) + " prefix position: "  + str(self.prefix_position)
+        return str(self.production) + " prefix position: " + str(self.prefix_position)

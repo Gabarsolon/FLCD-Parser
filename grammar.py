@@ -69,12 +69,6 @@ class Grammar:
         return closure_set
 
     def goto(self, analysisElements, symbol):
-        """
-
-        :param analysisElements:
-        :param symbol:
-        :return:
-        """
         result = list()
         for elem in analysisElements:
             if symbol in elem.production.right_hand_side:
@@ -100,6 +94,14 @@ class Grammar:
         #                                                                             ignore S'
         return [production for productions_for_terminal in list(self.productions.values())[1:] for production in
                 productions_for_terminal].index(production)
+
+    def get_all_productions_separated(self):
+        productions = list()
+        for non_terminal in self.productions.keys():
+            for production in self.productions_for_a_given_non_terminal(non_terminal):
+                for elem in production.right_hand_side:
+                    productions.append((non_terminal, elem))
+        return productions
 
     def get_production_given_his_number(self, production_number):
         return [production for productions_for_terminal in list(self.productions.values())[1:] for production in
@@ -158,7 +160,6 @@ class Grammar:
         working_stack = [0]
         input_stack = [*sequence]
         output_band = []
-
         parsing_table = self.parsing_table()
 
         while len(working_stack) != 0:
@@ -203,3 +204,8 @@ class Grammar:
 
         print("Sequence is not valid")
         return
+
+
+grammar = Grammar()
+grammar.read_grammar_from_file("G1.txt")
+print(str(grammar.get_all_productions_separated()))
