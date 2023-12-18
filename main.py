@@ -12,6 +12,7 @@ def main():
     grammar = Grammar()
     grammar.read_grammar_from_file("G1.txt")
     print(grammar.parsing_table())
+    print(grammar.parse_sequence("abbc"))
     while True:
         print_menu()
         option = input("Enter your option: ")

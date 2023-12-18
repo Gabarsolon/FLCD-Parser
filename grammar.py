@@ -100,6 +100,10 @@ class Grammar:
         #                                                                             ignore S'
         return [production for productions_for_terminal in list(self.productions.values())[1:] for production in productions_for_terminal].index(production)
 
+    def get_production_given_his_number(self, production_number):
+        return [production for productions_for_terminal in list(self.productions.values())[1:] for production in
+                productions_for_terminal][production_number]
+
     def parsing_table(self):
         """
         The table will be represented as a list (as shown bellow)
@@ -131,19 +135,14 @@ class Grammar:
                         table_entry["ACTION"].append("shift")
                     #check which state threats this shift
                     symbol_to_add = analysis_element.production.right_hand_side[analysis_element.prefix_position]
-                    for state_to_check_index in range(state_index + 1, len(states)):
+                    for state_to_check_index in range(state_index, len(states)):
                         state_to_check = states[state_to_check_index]
-
                         first_analysis_element = state_to_check[0]
                         if first_analysis_element.prefix_position > 0:
-                            if state_to_check_index == 3:
-                                print(first_analysis_element)
                             if first_analysis_element.production.right_hand_side[first_analysis_element.prefix_position - 1] == symbol_to_add:
                                 table_entry["GOTO"][symbol_to_add] = state_to_check_index
                                 break
                 elif analysis_element.prefix_position == len(analysis_element.production.right_hand_side):
-                    print(analysis_element)
-                    analysis_element_to_check = AnalysisElement(self.productions[self.start_symbol], 1)
                     if analysis_element == AnalysisElement(self.productions[self.start_symbol][0], 1):
                         table_entry["ACTION"].append("accept")
                     else:
@@ -155,6 +154,49 @@ class Grammar:
 
     def parse_sequence(self, sequence):
         working_stack = [0]
-        input_stack = [sequence.split("")]
+        input_stack = [*sequence]
         output_band = []
+
+        parsing_table = self.parsing_table()
+
+        while len(working_stack) != 0:
+            state = working_stack[-1]
+            table_entry = parsing_table[state]
+            action = table_entry["ACTION"]
+            if len(action) > 1:
+                print("The grammar is not LR(0)")
+                return
+            action = action[0]
+            if action == "shift":
+                current_sequence_item = input_stack[0]
+                if current_sequence_item in table_entry["GOTO"]:
+                    working_stack.append(current_sequence_item)
+                    working_stack.append(table_entry["GOTO"][current_sequence_item])
+                    input_stack.pop(0)
+                else:
+                    print("Sequence is not valid")
+                    return
+            elif action[0] == 'r':
+                reduction_production_number = int(action[1])
+                reduction_production = self.get_production_given_his_number(reduction_production_number)
+
+                working_stack.pop()
+                production_rhs_to_look_for_in_working_stack = [working_stack.pop()]
+                while production_rhs_to_look_for_in_working_stack != reduction_production.right_hand_side:
+                    working_stack.pop()
+                    production_rhs_to_look_for_in_working_stack.insert(0, working_stack.pop())
+
+                state_from_top_of_working_stack = working_stack[-1]
+                table_entry_from_top_of_working_stack = parsing_table[state_from_top_of_working_stack]
+                working_stack.append(reduction_production.left_hand_side)
+                working_stack.append(table_entry_from_top_of_working_stack["GOTO"][reduction_production.left_hand_side])
+                output_band.insert(0, reduction_production_number)
+            elif action == "accept":
+                return output_band
+            else:
+                print("Sequence is not valid")
+                return input_stack
+
+        print("Sequence is not valid")
+        return
 
