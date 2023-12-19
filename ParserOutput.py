@@ -17,9 +17,9 @@ class ParserOutput:
     def generateOutputTree(self, inputSequence):
         productionIndex = inputSequence[0]
         production = self.grammar.get_all_productions_separated()[productionIndex]
-        self.root.info = production[0]
+        self.root.info = production.left_hand_side
         self.current_index += 1
-        self.root.left_child = self.generateNode(self.root, production[1], inputSequence)
+        self.root.left_child = self.generateNode(self.root, production.right_hand_side, inputSequence)
 
     def generateNode(self, parent, content, inputSequence):
         if len(content) == 0 or self.indexInput >= len(inputSequence) + 1:
@@ -39,7 +39,7 @@ class ParserOutput:
             self.current_index += 1
             node.parent = parent
             self.indexInput += 1
-            node.left_child = self.generateNode(node, production[1], inputSequence)
+            node.left_child = self.generateNode(node, production.right_hand_side, inputSequence)
             content = content[1:]
             node.right_sibling = self.generateNode(parent, content, inputSequence)
             return node
@@ -62,5 +62,5 @@ class ParserOutput:
     def PrintToFile(self, filePath):
         file = open(filePath, 'w')
         for row in self.TreeToList(self.root):
-            file.write(str(row))
+            file.write(str(row) + '\n')
         file.close()

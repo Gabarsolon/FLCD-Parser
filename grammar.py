@@ -96,12 +96,8 @@ class Grammar:
                 productions_for_terminal].index(production)
 
     def get_all_productions_separated(self):
-        productions = list()
-        for non_terminal in self.productions.keys():
-            for production in self.productions_for_a_given_non_terminal(non_terminal):
-                for elem in production.right_hand_side:
-                    productions.append((non_terminal, elem))
-        return productions
+        return [production for productions_for_terminal in list(self.productions.values())[1:] for production in
+                productions_for_terminal]
 
     def get_production_given_his_number(self, production_number):
         return [production for productions_for_terminal in list(self.productions.values())[1:] for production in

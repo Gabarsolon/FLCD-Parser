@@ -1,6 +1,7 @@
 from analysis_element import AnalysisElement
 from grammar import Grammar
 from production import Production
+from ParserOutput import ParserOutput
 
 
 def print_menu():
@@ -12,7 +13,10 @@ def main():
     grammar = Grammar()
     grammar.read_grammar_from_file("G1.txt")
     print(grammar.parsing_table())
-    print(grammar.parse_sequence("abbc"))
+    parser_output = ParserOutput(grammar)
+    parser_output.generateOutputTree(grammar.parse_sequence("abbc"))
+    parser_output.PrintToFile(filePath="lr0.out")
+
     while True:
         print_menu()
         option = input("Enter your option: ")
