@@ -165,7 +165,7 @@ class Grammar:
             if len(actions) > 1:
                 print(
                     "The grammar is not LR(0).\nConflict appears on row {0}, for symbol {1}\nThe states in conflict are: {2}\nGOTO Column: ".format(
-                        state, input_stack[0], str(actions), str(table_entry["GOTO"])))
+                        state, input_stack[-2] if len(input_stack) > 2 else sequence[0], str(actions), str(table_entry["GOTO"])))
                 return
             action = actions[0]
             if action == "shift":

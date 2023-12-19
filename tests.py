@@ -118,7 +118,7 @@ class TestLR0(unittest.TestCase):
     def test_parse_sequence(self):
         assert (self.grammar.parse_sequence("abbc") == [0, 1, 1, 2])
 
-    def test_parser_ouput(self):
+    def test_parser_output(self):
         self.parser_output.generateOutputTree(self.grammar.parse_sequence("abbc"))
         assert (self.parser_output.TreeToList(self.parser_output.root) ==
                 [
@@ -128,4 +128,9 @@ class TestLR0(unittest.TestCase):
                     [{'index': 6, 'info': 'b'}, {'index': 7, 'info': 'A'}],
                     [{'index': 8, 'info': 'c'}]
                 ]
-                );
+            );
+
+    def test_table_conflicts(self):
+        not_lr0_grammar = Grammar()
+        not_lr0_grammar.read_grammar_from_file("G1_not_lr0.txt")
+        assert(not_lr0_grammar.parse_sequence("abbc") == None)
