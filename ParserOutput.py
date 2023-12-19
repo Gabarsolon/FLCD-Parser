@@ -53,7 +53,9 @@ class ParserOutput:
         if node:
             if len(result) <= depth:
                 result.append([])
-            result[depth].append({'index': node.index, 'info': node.info})
+            result[depth].append({'index': node.index, 'info': node.info,
+                                  'parent': node.parent.info if node.parent is not None else None,
+                                  'right_sibling': node.right_sibling.info if node.right_sibling is not None else None})
             self.TreeToList(node.left_child, depth + 1, result)
             self.TreeToList(node.right_sibling, depth, result)
 
