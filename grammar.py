@@ -152,9 +152,17 @@ class Grammar:
             table.append(table_entry)
         return table
 
-    def parse_sequence(self, sequence):
+    def read_sequence_from_file(self, sequence_file_path):
+        sequence = []
+        with(open(sequence_file_path)) as sequence_file:
+            for line in sequence_file:
+                sequence.append(line.split()[0])
+        return sequence
+
+    def parse_sequence(self, sequence_file_path):
+        sequence = self.read_sequence_from_file(sequence_file_path)
         working_stack = [0]
-        input_stack = [*sequence]
+        input_stack = sequence.copy()
         output_band = []
         parsing_table = self.parsing_table()
 
@@ -165,7 +173,8 @@ class Grammar:
             if len(actions) > 1:
                 print(
                     "The grammar is not LR(0).\nConflict appears on row {0}, for symbol {1}\nThe states in conflict are: {2}\nGOTO Column: ".format(
-                        state, input_stack[-2] if len(input_stack) > 2 else sequence[0], str(actions), str(table_entry["GOTO"])))
+                        state, input_stack[-2] if len(input_stack) > 2 else sequence[0], str(actions),
+                        str(table_entry["GOTO"])))
                 return
             action = actions[0]
             if action == "shift":
@@ -196,12 +205,7 @@ class Grammar:
                 return output_band
             else:
                 print("Sequence is not valid")
-                return input_stack
+                return
 
         print("Sequence is not valid")
         return
-
-
-grammar = Grammar()
-grammar.read_grammar_from_file("G1.txt")
-print(str(grammar.get_all_productions_separated()))

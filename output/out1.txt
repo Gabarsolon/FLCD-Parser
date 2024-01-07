@@ -1,0 +1,5 @@
+[{'index': 1, 'info': 'S', 'parent': None, 'right_sibling': None}]
+[{'index': 2, 'info': 'a', 'parent': 'S', 'right_sibling': 'A'}, {'index': 3, 'info': 'A', 'parent': 'S', 'right_sibling': None}]
+[{'index': 4, 'info': 'b', 'parent': 'A', 'right_sibling': 'A'}, {'index': 5, 'info': 'A', 'parent': 'A', 'right_sibling': None}]
+[{'index': 6, 'info': 'b', 'parent': 'A', 'right_sibling': 'A'}, {'index': 7, 'info': 'A', 'parent': 'A', 'right_sibling': None}]
+[{'index': 8, 'info': 'c', 'parent': 'A', 'right_sibling': None}]
