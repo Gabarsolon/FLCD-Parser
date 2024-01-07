@@ -12,6 +12,11 @@ class Grammar{
   +closure(self, analysisElements: List<AnalysisElement>): List<AnalysisElement>
   +goto(self, analysisElements: List<analysisElement>, symbol: String): List<AnalysisElement>
   +canonical_collection(self): List<List<AnalysisElement> 
+  +get_production_number(self): Integer
+  +get_all_productions_separated(self): List<Production>
+  +get_prodction_given_his_number(self, production_number): Production
+  +parsing_table(self): List<Map<String, List<String> | Map<String, Integer>>
+  +parse_sequence(self, sequence): List<Integer>
 }
 
 class Production{
@@ -24,8 +29,29 @@ class AnalysisElement{
   +prefix_position: Integer
 }
 
+class Entry{
+  +index: Integer
+  +info: String
+  +parent: Entry
+  +right_sibling: Entry
+  +left_child: Entry
+}
+
+class ParserOutput{
+  +current_index: Integer = 1
+  +root : Entry = Entry(current_index, "")
+  +grammar: Grammar
+  +indexInput : Integer = 1
+  
+  +generatedOutputTree(self, string_of_productions): None
+  +generateNode(self, parent, content, inputSequence): Entry
+  +TreeToList(self, node, depth=0, result=None): List<List<Entry>>
+  +PrintToFile(self, filePath): None
+}
 
 Production o-- Grammar
 AnalysisElement o-- Grammar
+Entry o-- ParserOutput
+Grammar o-- ParserOutput
 
 @enduml

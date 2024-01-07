@@ -14,12 +14,12 @@ class ParserOutput:
         self.grammar = grammar
         self.indexInput = 1
 
-    def generateOutputTree(self, inputSequence):
-        productionIndex = inputSequence[0]
+    def generateOutputTree(self, string_of_productions):
+        productionIndex = string_of_productions[0]
         production = self.grammar.get_all_productions_separated()[productionIndex]
         self.root.info = production.left_hand_side
         self.current_index += 1
-        self.root.left_child = self.generateNode(self.root, production.right_hand_side, inputSequence)
+        self.root.left_child = self.generateNode(self.root, production.right_hand_side, string_of_productions)
 
     def generateNode(self, parent, content, inputSequence):
         if len(content) == 0 or self.indexInput >= len(inputSequence) + 1:
