@@ -11,7 +11,7 @@ class TestLR0(unittest.TestCase):
         self.longMessage = True
         self.grammar = Grammar()
         self.parser_output = ParserOutput(self.grammar)
-        self.grammar.read_grammar_from_file("G1.txt")
+        self.grammar.read_grammar_from_file("input/G1.txt")
 
     def tearDown(self) -> None:
         pass
@@ -116,10 +116,10 @@ class TestLR0(unittest.TestCase):
                 );
 
     def test_parse_sequence(self):
-        assert (self.grammar.parse_sequence("abbc") == [0, 1, 1, 2])
+        assert (self.grammar.parse_sequence("input/seq.txt") == [0, 1, 1, 2])
 
     def test_parser_output(self):
-        self.parser_output.generateOutputTree(self.grammar.parse_sequence("abbc"))
+        self.parser_output.generateOutputTree(self.grammar.parse_sequence("input/seq.txt"))
         assert (self.parser_output.TreeToList(self.parser_output.root) ==
                 [
                     [{'index': 1, 'info': 'S', 'parent': None, 'right_sibling': None}],
@@ -139,5 +139,5 @@ class TestLR0(unittest.TestCase):
 
     def test_table_conflicts(self):
         not_lr0_grammar = Grammar()
-        not_lr0_grammar.read_grammar_from_file("G1_not_lr0.txt")
-        assert(not_lr0_grammar.parse_sequence("abbc") == None)
+        not_lr0_grammar.read_grammar_from_file("input/G1_not_lr0.txt")
+        assert(not_lr0_grammar.parse_sequence("input/seq.txt") == None)
